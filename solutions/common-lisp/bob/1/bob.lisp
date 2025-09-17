@@ -1,0 +1,18 @@
+(defpackage :bob
+  (:use :cl)
+  (:export :response))
+(in-package :bob)
+
+(defun response (hey-bob)
+  (let* ((greeting (string-trim '(#\space #\tab #\newline) hey-bob))
+         (greeting-length (length greeting))
+         (last-char (and (> greeting-length 0)
+                         (aref greeting (- greeting-length 1))))
+         (question-p (and last-char (eql #\? last-char)))
+         (yelling-p (and (string= greeting (string-upcase greeting))
+                         (string/= greeting (string-downcase greeting)))))
+    (cond ((zerop greeting-length) "Fine. Be that way!")
+          ((and question-p yelling-p) "Calm down, I know what I'm doing!")
+          (yelling-p "Whoa, chill out!")
+          (question-p "Sure.")
+          (t "Whatever."))))
