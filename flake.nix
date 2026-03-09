@@ -1,6 +1,6 @@
 {
   description = "Support exercism.io site for learning";
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
 
   outputs = { self, nixpkgs }: let
     system = "x86_64-linux";
