@@ -5,27 +5,19 @@
 (in-package :grade-school)
 
 (defun make-school ()
-  '())
+  (make-array '(12) :initial-element '()))
 
 (defun add (school name grade)
-  (if (assoc name school)
-      school
-      (push (cons name grade) school)))
+  (let ((current-students-in-grade (elt school (1- grade))))
+    (unless (or (member name current-students-in-grade :test #'string=)
+                (member name (roster school) :test #'string=))
+        (setf (elt school (1- grade)) (sort (cons name current-students-in-grade) #'string<)))))
 
 (defun roster (school)
-  (mapcar #'car school))
-;(roster '(("George" . 2) ("Joe" . 2)))
+  (let ((roster '()))
+    (dotimes (grade-level (length school) roster)
+      (setf roster (append roster (elt school grade-level))))))
 
 (defun grade (school grade)
-  (format t "~%~S" school)
-  (sort (roster (remove-if-not (lambda (student)
-                                 (= grade (cdr student)))
-                               school))
-        #'string-lessp))
-;(grade '(("George" . 2) ("Joe" . 2) ("Jim" . 1) ("Dan" . 1)) 1)
-
-(let ((school (make-school)))
-  (add school "Franklin" 5)
-  (add school "Bradley" 5)
-  (add school "Jeff" 1)
-  (grade school 5))
+  (sort (elt school (1- grade))
+        #'string<))
